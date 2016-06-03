@@ -17,7 +17,7 @@ public class WordCountList{
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException{
 				String[] line = value.toString().split("<##>");
 				String palabra = line[0];
-				String direccion = line[1];
+				String direccion = line[1] + "<##>" + line[1];
 				context.write(new Text(palabra), new Text(direccion));
 		}
     }
