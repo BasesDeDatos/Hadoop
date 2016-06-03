@@ -32,14 +32,18 @@ public class MapReduce{
             }
             String total = Integer.toString(sum);
             context.write(key, new Text(total));
+        }
         /*
+        public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException{
 			String direcciones = "";
 			for (Text val : values){
 				direcciones += val.toString();
 			}
 			context.write(key, new Text(direcciones));
+
+		}
 		
-		
+		public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException{
 			String occurrences;
 			String newKey;
 			
@@ -60,10 +64,8 @@ public class MapReduce{
 				newKey = key.toString() + "<##>" + element;
 				context.write(new Text(newKey), new Text(occurrences));
 			}
+		}
 		*/
-        }
-        
-        
     }
     
     public static void main(String[] args) throws Exception{
@@ -81,9 +83,11 @@ public class MapReduce{
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(TextOutputFormat.class);
         
+        job.setNumReduceTasks(3);
+
         FileInputFormat.addInputPath(job, new Path (args[0]));
         FileOutputFormat.setOutputPath(job, new Path (args[1]));
-        
+                
         job.waitForCompletion(true);
     }
     
