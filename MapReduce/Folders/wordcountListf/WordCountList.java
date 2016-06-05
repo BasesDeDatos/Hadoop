@@ -31,7 +31,7 @@ public class WordCountList{
                 hash.add(val.toString());
             }
             for (String dir : hash){
-				direcciones += dir + "\\^\\|\\^";
+				direcciones += dir + "<!!>";
 			}
             context.write(key, new Text(direcciones));
         }
