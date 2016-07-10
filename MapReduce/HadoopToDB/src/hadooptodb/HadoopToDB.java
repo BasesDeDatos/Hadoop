@@ -8,11 +8,11 @@ import java.util.Scanner;
 
 public class HadoopToDB {
     
-    // JDBC driver name and database URL
+    //Direccion del JDBC y URL de la base de datos
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
     static final String DB_URL = "jdbc:mysql://localhost/test";
 
-    //  Database credentials
+    //Credenciales de la base de datos
     static final String USER = "prueba";
     static final String PASS = "prueba";
     
@@ -30,17 +30,19 @@ public class HadoopToDB {
         String[] address;
         String[] line;
         ArrayList<String> row = new ArrayList();
-        /*
+        
+        //Inserta la pablabra con su respectivo conteo global
         Scanner partTotal = new Scanner(new File("partTotal.txt"));
-        System.out.println("Mapeando tabla totalCount");
+        System.out.println("Mapeando tabla totalCount...\n");
         while(partTotal.hasNextLine()){
             line = partTotal.nextLine().toString().split("\t");
             sql = "INSERT INTO totalCount(word, count) VALUES ('" + line[0] + "', '" + line[1] + "')";
             stmt.execute(sql);
         }
         
+        //Inserta la pablabra con su conteo por pagina
         Scanner partPage = new Scanner(new File("partPage.txt"));
-        System.out.println("Mapeando tabla pageCount");
+        System.out.println("Mapeando tabla pageCount...\n");
         while(partPage.hasNextLine()){
             line = partPage.nextLine().toString().split("\t");
             address = line[0].split("<##>");
@@ -48,9 +50,10 @@ public class HadoopToDB {
             stmt.execute(sql);
             row.clear();
         }
-        */
+        
+        //Inserta la pablabra con su respectiva lista de paginas
         Scanner partList = new Scanner(new File("partList.txt"));
-        System.out.println("Mapeando tabla addressXword");
+        System.out.println("Mapeando tabla addressXword...\n");
         while(partList.hasNextLine()){
             String[] newAddress;
             line = partList.nextLine().split("\t");
@@ -63,16 +66,5 @@ public class HadoopToDB {
                 stmt.execute(sql);
             }
         }
-        /*
-        Scanner input = new Scanner(new File("pruebaExportar.txt"));
-        
-        String[] map;
-        
-        while(input.hasNextLine()){
-            map = input.nextLine().toString().split("<##>");
-            System.out.println(map[0] + "\t" + map[1] + "\t" + map[2]);
-        }
-        */
     }
-    
 }

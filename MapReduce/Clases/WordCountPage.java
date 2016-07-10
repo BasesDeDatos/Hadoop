@@ -10,7 +10,7 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
-public class WordCountTotal{
+public class WordCountPage{
     
     public static class Map extends Mapper<LongWritable, Text, Text, Text>{
 	
@@ -21,16 +21,28 @@ public class WordCountTotal{
 				context.write(new Text(palabra), new Text(direccion));
 		}
     }
-        
+    
     public static class Reduce extends Reducer<Text, Text, Text, Text>{
         
         public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException{
-            int sum = 0;
-            for (Text val : values){
-                sum++;
-            }
-            String total = Integer.toString(sum);
-            context.write(key, new Text(total));
+            			String occurrences;
+			String newKey;
+			
+			List<String> elements = new ArrayList<String>();
+			for (Text val : values) {
+				elements.add(val.toString());
+			}
+			
+			Set<String> uniqueElements = new HashSet<String>();
+			for (String element : elements){
+				uniqueElements.add(element);
+			}
+						
+			for(String element : uniqueElements){
+				occurrences = Integer.toString(Collections.frequency(elements, element));
+				newKey = key.toString() + "<##>" + element;
+				context.write(new Text(newKey), new Text(occurrences));
+			}
         }
         
     }
@@ -38,8 +50,8 @@ public class WordCountTotal{
     public static void main(String[] args) throws Exception{
         Configuration conf = new Configuration();
         
-        Job job = new Job(conf, "WordCountTotaljob");
-        job.setJarByClass(WordCountTotal.class);
+        Job job = new Job(conf, "WordCountPagejob");
+        job.setJarByClass(WordCountPage.class);
         
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);

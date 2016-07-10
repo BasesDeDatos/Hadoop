@@ -17,7 +17,7 @@ public class WordCountList{
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException{
 				String[] line = value.toString().split("<##>");
 				String palabra = line[0];
-				String direccion = line[1];
+				String direccion = line[1] + "<##>" + line[2];
 				context.write(new Text(palabra), new Text(direccion));
 		}
     }
@@ -26,9 +26,13 @@ public class WordCountList{
         
         public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException{
             String direcciones = "";
+            Set<String> hash = new HashSet<String>();
             for (Text val : values){
-                direcciones += val.toString();
+                hash.add(val.toString());
             }
+            for (String dir : hash){
+				direcciones += dir + "<!!>";
+			}
             context.write(key, new Text(direcciones));
         }
         
